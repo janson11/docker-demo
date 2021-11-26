@@ -39,3 +39,60 @@ Docker 是利用 Linux 的 Namespace 、Cgroups 和联合文件系统三大机�
  进程父子关系
   sudo pstree -l -a -A 4147
 
+构建镜像
+使用docker commit命令从运行中的容器提交为镜像；
+
+使用docker build命令从 Dockerfile 构建镜像。
+
+
+使用 Dockerfile 构建镜像具有以下特性：
+Dockerfile 的每一行命令都会生成一个独立的镜像层，并且拥有唯一的 ID；
+Dockerfile 的命令是完全透明的，通过查看 Dockerfile 的内容，就可以知道镜像是如何一步步构建的；
+Dockerfile 是纯文本的，方便跟随代码一起存放在代码仓库并做版本管理。
+
+## 4 Dockerfile命令
+
+Dockerfile 指令	指令简介
+
+|Dockerfile指令   |指令简介|
+|---|---|
+|FROM|Dockerfile 除了注释第一行必须是 FROM ，FROM 后面跟镜像名称，代表我们要基于哪个基础镜像构建我们的容器。|
+| RUN  |  RUN 后面跟一个具体的命令，类似于 Linux 命令行执行命令。 |
+| ADD  | 拷贝本机文件或者远程文件到镜像内  |
+| COPY  | 拷贝本机文件到镜像内  |
+|USER| 指定容器启动的用户  |
+| ENTRYPOINT  | 容器的启动命令  |
+| CMD  | CMD 为 ENTRYPOINT 指令提供默认参数，也可以单独使用 CMD 指定容器启动参数  |
+|ENV|  指定容器运行时的环境变量，格式为 key=value |
+| ARG  | 定义外部变量，构建镜像时可以使用 build-arg = 的格式传递参数用于构建  |
+|  EXPOSE |  指定容器监听的端口，格式为 [port]/tcp 或者 [port]/udp |
+|  WORKDIR |  为 Dockerfile 中跟在其后的所有 RUN、CMD、ENTRYPOINT、COPY 和 ADD 命令设置工作目录。 |
+
+
+
+RUN	RUN 后面跟一个具体的命令，类似于 Linux 命令行执行命令。
+ADD	拷贝本机文件或者远程文件到镜像内
+COPY	拷贝本机文件到镜像内
+USER	指定容器启动的用户
+ENTRYPOINT	容器的启动命令
+CMD	CMD 为 ENTRYPOINT 指令提供默认参数，也可以单独使用 CMD 指定容器启动参数
+ENV	指定容器运行时的环境变量，格式为 key=value
+ARG	定义外部变量，构建镜像时可以使用 build-arg = 的格式传递参数用于构建
+EXPOSE	指定容器监听的端口，格式为 [port]/tcp 或者 [port]/udp
+WORKDIR	为 Dockerfile 中跟在其后的所有 RUN、CMD、ENTRYPOINT、COPY 和 ADD 命令设置工作目录。
+
+
+镜像操作命令：
+
+拉取镜像，使用 docker pull 命令拉取远程仓库的镜像到本地 ；
+
+重命名镜像，使用 docker tag 命令“重命名”镜像 ；
+
+查看镜像，使用 docker image ls 或 docker images 命令查看本地已经存在的镜像；
+
+删除镜像，使用 docker rmi 命令删除无用镜像 ；
+
+构建镜像，构建镜像有两种方式。第一种方式是使用 docker build 命令基于 Dockerfile 构建镜像，也是我比较推荐的镜像构建方式；第二种方式是使用 docker commit 命令基于已经运行的容器提交为镜像。
+
+镜像的实现原理：
+镜像是由一系列的镜像层（layer ）组成，每一层代表了镜像构建过程中的一次提交，当我们需要修改镜像内的某个文件时，只需要在当前镜像层的基础上新建一个镜像层，并且只存放修改过的文件内容。分层结构使得镜像间共享镜像层变得非常简单和方便。2021年11月26日
